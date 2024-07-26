@@ -3,7 +3,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const cors = require('cors')
+const cors = require('cors');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 const SECRET_KEY = 'your_secret_key';
@@ -11,8 +12,16 @@ const SECRET_KEY = 'your_secret_key';
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect('mongodb://localhost:27017/timecapsule');
+// MongoDB와 연결
+mongoose.connect('mongodb://localhost:27017/timecapsule')
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch(err => {
+    console.log('Failed to connect to MongoDB', err);
+  });
 
+// 사용자 스키마 및 모델
 const UserSchema = new mongoose.Schema({
   username: { type: String, unique: true },
   password: String
